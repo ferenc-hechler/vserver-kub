@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: canvas-vault
+  name: canvas-vault-hc-vs
+  labels:
+    app: canvas-vault-hc
+spec:
+  gateways:
+  - istio-system/kub-feri-ai-gateway
+  hosts:
+  - 'canvas-vault-hc.kub.feri.ai'
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: canvas-vault-hc.canvas-vault.svc.cluster.local
+        port:
+          number: 8200
