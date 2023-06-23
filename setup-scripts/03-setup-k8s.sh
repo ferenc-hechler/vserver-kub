@@ -116,7 +116,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 # before k8s 1.26: 
-kubectl taint nodes --all node-role.kubernetes.io/master-
+kubectl taint nodes --all node-role.kubernetes.io/master- || true
 
 # Install a CNI plugin
 
