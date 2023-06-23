@@ -63,6 +63,17 @@ the local filesystem ~/.kube/config
 ```
 
 
+# Install HashiCorp Vault in DEV mode
+
+not for production!
+
+```
+## install canvas-vault
+helm repo add hashicorp https://helm.releases.hashicorp.com
+helm repo update
+helm upgrade --install canvas-vault-hc hashicorp/vault --version 0.24.0 --namespace canvas-vault --create-namespace --values 90-canvas-vault-hc/values.yaml
+```
+
 # Step 5 - Cert-Manager
 
 
