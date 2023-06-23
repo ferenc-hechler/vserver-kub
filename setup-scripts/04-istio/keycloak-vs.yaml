@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: canvas
+  name: keycloak-vs
+  labels:
+    app: keycloak
+spec:
+  gateways:
+  - istio-system/vps2-gateway
+  hosts:
+  - 'keycloak.vps2.cluster-1.de'
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: canvas-keycloak.canvas.svc.cluster.local
+        port:
+          number: 8088

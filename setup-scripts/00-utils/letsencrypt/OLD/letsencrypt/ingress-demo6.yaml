@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo6-le-ingress
+  namespace: dev
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production  
+spec:
+  ingressClassName: nginx
+  tls:
+    - secretName: demo6-ssl
+      hosts:
+      - demo6.k8s2.feri.ai               
+  rules:
+  - host: "demo6.k8s2.feri.ai"
+    http:
+      paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: hello-service
+              port:
+                number: 80
