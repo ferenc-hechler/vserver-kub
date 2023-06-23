@@ -20,5 +20,5 @@ spec:
       number: 443
       protocol: HTTPS
     tls:
-      credentialName: wc-kub-feri-ai
+      credentialName: wc-kub-feri-ai-tls
       mode: SIMPLE
