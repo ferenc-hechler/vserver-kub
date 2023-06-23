@@ -11,7 +11,7 @@ Important: the script contains my public SSH key to allow login with ssh. You sh
 replace the value in `echo "ssh-ed25519 AAAAC3Nza...` with your public key.
 
 ```
-curl -O https://raw.githubusercontent.com/ferenc-hechler/vserver-k8s-setup/main/setup-scripts/01-create-user.sh
+curl -O https://raw.githubusercontent.com/ferenc-hechler/vserver-kub/main/setup-scripts/01-create-user.sh
 source 01-create-user.sh ferenc
    <enter hidden password>
 
@@ -24,7 +24,7 @@ login as newly created user
 # Step 2 - Clone this Repo
 
 ```
-curl https://raw.githubusercontent.com/ferenc-hechler/vserver-k8s-setup/main/setup-scripts/02-clone-repo.sh | bash
+curl https://raw.githubusercontent.com/ferenc-hechler/vserver-kub/main/setup-scripts/02-clone-repo.sh | bash
 ```
 
 # All following steps (except backup & restore) 
@@ -32,14 +32,14 @@ curl https://raw.githubusercontent.com/ferenc-hechler/vserver-k8s-setup/main/set
 The steps can be executed each or all together with the following command:
 
 ```
-~/git/vserver-k8s-setup/setup-scripts/xx-run-all-scripts.sh
+~/git/vserver-kub/setup-scripts/xx-run-all-scripts.sh
 ```
 
 
 # Step 3 - Setup Kubernetes
 
 ```
-~/git/vserver-k8s-setup/setup-scripts/03-setup-k8s.sh
+~/git/vserver-kub/setup-scripts/03-setup-k8s.sh
 ```
 
 ## Use kubectl from local PC
@@ -53,13 +53,13 @@ the local filesystem ~/.kube/config
 ## 4-1 install ingress-nginx
 
 ```
-~/git/vserver-k8s-setup/setup-scripts/04-1-ingress-nginx.sh
+~/git/vserver-kub/setup-scripts/04-1-ingress-nginx.sh
 ```
 
 ## 4-2 forward default ports (sudo inside) 
 
 ```
-~/git/vserver-k8s-setup/setup-scripts/04-2-route-default-ports.sh
+~/git/vserver-kub/setup-scripts/04-2-route-default-ports.sh
 ```
 
 
@@ -67,7 +67,7 @@ the local filesystem ~/.kube/config
 
 
 ```
-~/git/vserver-k8s-setup/setup-scripts/05-cert-manager.sh
+~/git/vserver-kub/setup-scripts/05-cert-manager.sh
 ```
 
 
@@ -76,13 +76,13 @@ the local filesystem ~/.kube/config
 https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack
 
 ```
-~/git/vserver-k8s-setup/setup-scripts/06-prometheus-grafana.sh
+~/git/vserver-kub/setup-scripts/06-prometheus-grafana.sh
 ```
 
 # Step 7 - Dashboard
 
 ```
-~/git/vserver-k8s-setup/setup-scripts/07-dashboard.sh
+~/git/vserver-kub/setup-scripts/07-dashboard.sh
 ```
 
 # Step 8 - MinIO
@@ -101,7 +101,7 @@ Infos
 
 
 ```
-~/git/vserver-k8s-setup/setup-scripts/08-1-minio.sh
+~/git/vserver-kub/setup-scripts/08-1-minio.sh
 ```
 
 # Applikationen
@@ -109,43 +109,43 @@ Infos
 ## Minecraft
 
 ```
-~/git/vserver-k8s-setup/setup-scripts/30-1-minecraft.sh
+~/git/vserver-kub/setup-scripts/30-1-minecraft.sh
 ```
 
 ### setup routes from port 61267 to nodeport (uses sudo)  
 
 ```
-~/git/vserver-k8s-setup/setup-scripts/30-2-route-minecraft-port.sh
+~/git/vserver-kub/setup-scripts/30-2-route-minecraft-port.sh
 ```
 
 ### World-Backup CronJob (needs git-crypt unlock)
   
 ```
-~/git/vserver-k8s-setup/setup-scripts/30-3-minecraft-backup.sh
+~/git/vserver-kub/setup-scripts/30-3-minecraft-backup.sh
 ```
 
 ### Manual World-Restore Job (needs git-crypt unlock)
   
 ```
-# ~/git/vserver-k8s-setup/setup-scripts/30-4-minecraft-restore.sh
+# ~/git/vserver-kub/setup-scripts/30-4-minecraft-restore.sh
 ```
 
 ## Nexus
 
 ```
-~/git/vserver-k8s-setup/setup-scripts/40-1-nexus.sh
+~/git/vserver-kub/setup-scripts/40-1-nexus.sh
 ```
 
 ### Nexus Backup CronJob (needs git-crypt unlock)
   
 ```
-~/git/vserver-k8s-setup/setup-scripts/40-2-nexus-backup.sh
+~/git/vserver-kub/setup-scripts/40-2-nexus-backup.sh
 ```
 
 ### Manual Nexus-Restore Job (needs git-crypt unlock)
   
 ```
-# ~/git/vserver-k8s-setup/setup-scripts/40-3-nexus-restore.sh
+# ~/git/vserver-kub/setup-scripts/40-3-nexus-restore.sh
 ```
 
 
@@ -171,8 +171,8 @@ curl -L https://istio.io/downloadIstio | sh -
   See https://istio.io/latest/docs/setup/install/ to add Istio to your Kubernetes cluster.
   
   To configure the istioctl client tool for your workstation,
-  add the /home/ferenc/git/vserver-k8s-setup/setup-scripts/istio-1.16.1/bin directory to your environment path variable with:
-           export PATH="$PATH:/home/ferenc/git/vserver-k8s-setup/setup-scripts/istio-1.16.1/bin"
+  add the /home/ferenc/git/vserver-kub/setup-scripts/istio-1.16.1/bin directory to your environment path variable with:
+           export PATH="$PATH:/home/ferenc/git/vserver-kub/setup-scripts/istio-1.16.1/bin"
   
   Begin the Istio pre-installation check by running:
            istioctl x precheck
