@@ -74,11 +74,12 @@ sudo sysctl --system
 
 # Install kubeadm, kubelet & kubectl
 
+
 # Add Kubernetes GPG key
-sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+sudo curl -fsSLo /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.asc https://packages.cloud.google.com/apt/doc/apt-key.gpg
 
 # Add Kubernetes apt repository
-echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+echo "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.asc] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 # Fetch package list
 sudo apt-get update
