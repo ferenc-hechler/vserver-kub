@@ -76,6 +76,8 @@ helm install istio-ingress istio/gateway -n istio-ingress --set labels.app=istio
 
 the last command is blocked, until the status shows a hostname:
 
+ kubectl patch service -n istio-ingress istio-ingress --subresource=status --type='json' --patch '[{ "op": "replace", "path": "/status/loadBalancer", "value": {"ingress": [{"ip":"207.180.253.250"}]} }]'
+
 ```
 kubectl edit service -n istio-ingress --subresource=status istio-ingress
 
