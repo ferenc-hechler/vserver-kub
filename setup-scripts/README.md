@@ -48,6 +48,67 @@ To execute kubectl from a local PC the content of ~/.kube/config has to be copie
 the local filesystem ~/.kube/config
 
 
+# Canvas-ODA
+
+## Helm repos
+
+```
+# https://github.com/helm/helm/issues/2247
+helm plugin install --version "main" https://github.com/Noksa/helm-resolve-deps.git
+
+helm repo add jetstack https://charts.jetstack.io
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+```
+
+## Istio
+
+```
+helm repo add istio https://istio-release.storage.googleapis.com/charts
+helm repo update
+kubectl create namespace istio-system
+helm install istio-base istio/base -n istio-system
+helm install istiod istio/istiod -n istio-system --wait
+kubectl create namespace istio-ingress
+kubectl label namespace istio-ingress istio-injection=enabled
+helm install istio-ingress istio/gateway -n istio-ingress --set labels.app=istio-ingress --set labels.istio=ingressgateway --wait
+```
+
+the last command is blocked, until the status shows a hostname:
+
+```
+kubectl edit service -n istio-ingress --subresource=status istio-ingress
+
+  ...
+  status:
+    loadBalancer:
+      ingress:
+      - ip: 207.180.253.250
+```
+
+## install canvas-oda helm chart
+
+```
+cd ~/git/oda-canvas/installation/canvas-oda
+helm resolve-deps
+
+cd ..\cert-manager-init
+helm dependency update
+
+cd ..\canvas-oda
+helm dependency update
+```
+
+```
+helm install canvas -n canvas --create-namespace . 
+```
+
+```
+
+
+
+
+
 # Step 4 - Ingress NginX
 
 ## 4-1 install ingress-nginx
