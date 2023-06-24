@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  labels:
+    app: demoapp
+  name: demoapp-vs
+  namespace: demoapp
+spec:
+  gateways:
+  - components/component-gateway
+  hosts:
+  - 'demoapp.kub.feri.ai'
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: demoapp-service
+        port:
+          number: 80
