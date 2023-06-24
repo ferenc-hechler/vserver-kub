@@ -42,6 +42,15 @@ the local filesystem ~/.kube/config
 
 # Canvas-ODA
 
+## clone repository
+
+```
+cd ~/git
+git clone https://github.com/tmforum-oda/oda-canvas.git
+cd oda-canvas
+```
+
+
 ## Helm repos
 
 ```
@@ -68,7 +77,11 @@ helm install istio-ingress istio/gateway -n istio-ingress --set labels.app=istio
 
 the last command is blocked, until the status shows a hostname:
 
- kubectl patch service -n istio-ingress istio-ingress --subresource=status --type='json' --patch '[{ "op": "replace", "path": "/status/loadBalancer", "value": {"ingress": [{"ip":"207.180.253.250"}]} }]'
+```
+kubectl patch service -n istio-ingress istio-ingress --subresource=status --type="json" --patch "[{ \"op\": \"replace\", \"path\": \"/status/loadBalancer\", \"value\": {\"ingress\": [{\"ip\":\"207.180.253.250\"}]} }]"
+```
+
+or manual:
 
 ```
 kubectl edit service -n istio-ingress --subresource=status istio-ingress
@@ -83,13 +96,13 @@ kubectl edit service -n istio-ingress --subresource=status istio-ingress
 ## install canvas-oda helm chart
 
 ```
-cd ~/git/oda-canvas/installation/canvas-oda
+cd installation/canvas-oda
 helm resolve-deps
 
-cd ..\cert-manager-init
+cd ../cert-manager-init
 helm dependency update
 
-cd ..\canvas-oda
+cd ../canvas-oda
 helm dependency update
 ```
 
@@ -97,13 +110,31 @@ helm dependency update
 helm install canvas -n canvas --create-namespace . 
 ```
 
+
+## add wildcard cert
+
+```
+kubectl apply -f ~/git/vserver-kub/encrypted/certs/WC.kub.feri.ai/wc-kub-feri-ai-tls-istioing.yaml
+```
+
+## patch gateway
+
+```
+cd ~/git/vserver-kub/setup-scripts/04-oda-canvas
+kubectl apply -f component-gateway.yaml
+```
+
+
 ## add keycloak ingress
 
 ```
-kubectl apply -f 04-oda-canvas/keycloak-vs.yaml
+kubectl apply -f keycloak-vs.yaml
 ```
 
 keycloak is reachable under: [https://canvas-keycloak.kub.feri.ai/auth/](https://canvas-keycloak.kub.feri.ai/auth/)
+
+
+
 
 
 

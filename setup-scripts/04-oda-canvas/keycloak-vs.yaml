@@ -16,6 +16,6 @@ spec:
         prefix: /
     route:
     - destination:
-        host: canvas-keycloak
+        host: canvas-keycloak-headless
         port:
           number: 8083
