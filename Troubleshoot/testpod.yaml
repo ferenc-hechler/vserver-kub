@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: testpod
+  namespace: test
+spec:
+  containers:
+  - name: openebs-localpv-provisioner
+    command: ["/bin/sh", "-c", "sleep 3600"]
+    #command: ["ls", "-la"]
+    image: openebs/provisioner-localpv:3.3.0
+    imagePullPolicy: Always
+    
+  restartPolicy: Never

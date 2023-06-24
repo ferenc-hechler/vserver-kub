@@ -1,0 +1,122 @@
+pod/testpod created
+ferenc@vmd38168:~$ kubectl get pods -n test
+NAME      READY   STATUS   RESTARTS   AGE
+testpod   0/1     Error    0          5s
+ferenc@vmd38168:~$ kubectl get events -n test
+LAST SEEN   TYPE     REASON      OBJECT        MESSAGE
+16s         Normal   Scheduled   pod/testpod   Successfully assigned test/testpod to vmd38168.contaboserver.net
+16s         Normal   Pulled      pod/testpod   Container image "openebs/provisioner-localpv:3.4.0" already present on machine
+16s         Normal   Created     pod/testpod   Created container openebs-localpv-provisioner
+16s         Normal   Started     pod/testpod   Started container openebs-localpv-provisioner
+ferenc@vmd38168:~$ kubectl get pod -n test testpod -oyaml
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Pod","metadata":{"annotations":{},"name":"testpod","namespace":"test"},"spec":{"containers":[{"command":["/bin/sh","-c","sleep 3600"],"image":"openebs/provisioner-localpv:3.4.0","imagePullPolicy":"IfNotPresent","name":"openebs-localpv-provisioner"}],"restartPolicy":"Never"}}
+  creationTimestamp: "2023-06-24T10:27:10Z"
+  name: testpod
+  namespace: test
+  resourceVersion: "6664"
+  uid: e3b9697d-800f-4c59-9e71-34f48b4e2c79
+spec:
+  containers:
+  - command:
+    - /bin/sh
+    - -c
+    - sleep 3600
+    image: openebs/provisioner-localpv:3.4.0
+    imagePullPolicy: IfNotPresent
+    name: openebs-localpv-provisioner
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-lt989
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: vmd38168.contaboserver.net
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Never
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-lt989
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2023-06-24T10:27:10Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2023-06-24T10:27:10Z"
+    reason: PodFailed
+    status: "False"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2023-06-24T10:27:10Z"
+    reason: PodFailed
+    status: "False"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2023-06-24T10:27:10Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://da876b8a52701563dfeda1012cd7f52f2bd32e46f0bb66c7c37943df4f9c7256
+    image: docker.io/openebs/provisioner-localpv:3.4.0
+    imageID: docker.io/openebs/provisioner-localpv@sha256:b68b8a104faa9294571b6d1b0f3c3ec15ff8ba06f6b3f8d193865f324025636a
+    lastState: {}
+    name: openebs-localpv-provisioner
+    ready: false
+    restartCount: 0
+    started: false
+    state:
+      terminated:
+        containerID: containerd://da876b8a52701563dfeda1012cd7f52f2bd32e46f0bb66c7c37943df4f9c7256
+        exitCode: 1
+        finishedAt: "2023-06-24T10:27:10Z"
+        reason: Error
+        startedAt: "2023-06-24T10:27:10Z"
+  hostIP: 207.180.253.250
+  phase: Failed
+  podIP: 10.244.0.16
+  podIPs:
+  - ip: 10.244.0.16
+  qosClass: BestEffort
+  startTime: "2023-06-24T10:27:10Z"
+ferenc@vmd38168:~$ kubectl logs -n test testpod
+exec /bin/sh: exec format error

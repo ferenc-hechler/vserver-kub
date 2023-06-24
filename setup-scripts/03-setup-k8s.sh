@@ -32,9 +32,12 @@ curl -fsSLo containerd-config.toml https://gist.githubusercontent.com/oradwell/3
 sudo mkdir -p /etc/containerd
 sudo mv containerd-config.toml /etc/containerd/config.toml
 
-curl -fsSLo containerd-1.6.14-linux-amd64.tar.gz https://github.com/containerd/containerd/releases/download/v1.6.14/containerd-1.6.14-linux-amd64.tar.gz
+# curl -fsSLo containerd-1.6.14-linux-amd64.tar.gz https://github.com/containerd/containerd/releases/download/v1.6.14/containerd-1.6.14-linux-amd64.tar.gz
+curl -fsSLo containerd-1.7.2-linux-amd64.tar.gz https://github.com/containerd/containerd/releases/download/v1.7.2/containerd-1.7.2-linux-amd64.tar.gz
+
 ## Extract the binaries
-sudo tar Cxzvf /usr/local containerd-1.6.14-linux-amd64.tar.gz
+# sudo tar Cxzvf /usr/local containerd-1.6.14-linux-amd64.tar.gz
+sudo tar Cxzvf /usr/local containerd-1.7.2-linux-amd64.tar.gz
 
 ## Install containerd as a service
 sudo curl -fsSLo /etc/systemd/system/containerd.service https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
@@ -44,14 +47,19 @@ sudo systemctl enable --now containerd
 
 ## install runc
 
-curl -fsSLo runc.amd64 https://github.com/opencontainers/runc/releases/download/v1.1.3/runc.amd64
+# curl -fsSLo runc.amd64 https://github.com/opencontainers/runc/releases/download/v1.1.3/runc.amd64
+curl -fsSLo runc.amd64 https://github.com/opencontainers/runc/releases/download/v1.1.7/runc.amd64
+
 sudo install -m 755 runc.amd64 /usr/local/sbin/runc
 
 ## Install CNI network plugins
 
-curl -fsSLo cni-plugins-linux-amd64-v1.1.1.tgz https://github.com/containernetworking/plugins/releases/download/v1.1.1/cni-plugins-linux-amd64-v1.1.1.tgz
+# curl -fsSLo cni-plugins-linux-amd64-v1.1.1.tgz https://github.com/containernetworking/plugins/releases/download/v1.1.1/cni-plugins-linux-amd64-v1.1.1.tgz
+curl -fsSLo cni-plugins-linux-amd64-v1.3.0.tgz https://github.com/containernetworking/plugins/releases/download/v1.3.0/cni-plugins-linux-amd64-v1.3.0.tgz
+
 sudo mkdir -p /opt/cni/bin
-sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.1.1.tgz
+# sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.1.1.tgz
+sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.3.0.tgz
 
 ## Forward IPv4 and let iptables see bridged network traffic
 
@@ -115,7 +123,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 # allow master/control-plane node to run workloads
 
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-# before k8s 1.26: 
+# before k8s 1.25?: 
 kubectl taint nodes --all node-role.kubernetes.io/master- || true
 
 # Install a CNI plugin
@@ -129,10 +137,11 @@ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bas
 
 # Add openebs repo to helm
 helm repo add openebs https://openebs.github.io/charts
+helm repo update
 
-kubectl create namespace openebs
-
-helm --namespace=openebs install openebs openebs/openebs
+### problems with 3.4.0: https://github.com/openebs/dynamic-localpv-provisioner/pkgs/container/provisioner-localpv
+helm install openebs --namespace=openebs --create-namespace openebs/openebs --version=3.7.0
+# helm install openebs --namespace=openebs --create-namespace openebs/openebs --version=3.3.0
 
 # define a default storageclass:
 kubectl patch storageclass openebs-hostpath -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
