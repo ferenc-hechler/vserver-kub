@@ -27,14 +27,6 @@ login as newly created user
 curl https://raw.githubusercontent.com/ferenc-hechler/vserver-kub/main/setup-scripts/02-clone-repo.sh | bash
 ```
 
-# All following steps (except backup & restore) 
-
-The steps can be executed each or all together with the following command:
-
-```
-~/git/vserver-kub/setup-scripts/xx-run-all-scripts.sh
-```
-
 
 # Step 3 - Setup Kubernetes
 
@@ -105,8 +97,13 @@ helm dependency update
 helm install canvas -n canvas --create-namespace . 
 ```
 
+## add keycloak ingress
+
+```
+kubectl apply -f 04-oda-canvas/keycloak-vs.yaml
 ```
 
+keycloak is reachable under: [https://canvas-keycloak.kub.feri.ai/auth/](https://canvas-keycloak.kub.feri.ai/auth/)
 
 
 
